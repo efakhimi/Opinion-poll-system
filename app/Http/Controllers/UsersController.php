@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Users;
 use App\Models\Survey;
 use App\Models\Questions;
+use App\Models\Answers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
@@ -318,8 +319,7 @@ class UsersController extends Controller
             "answer.*"    => "required|array|min:2",
             "answer.*.*"  => "required|string|distinct|min:1",
             "correct"    => "sometimes|nullable|array|min:1",
-            "correct.*"    => "sometimes|nullable|array|min:1",
-            "correct.*.*"  => "sometimes|nullable|accepted",
+            "correct.*"    => "sometimes|nullable|integer|min:0",
         ]);
 
         //dd($request->correct);
@@ -333,7 +333,7 @@ class UsersController extends Controller
             $Questions->answers = json_encode($request->answer[$qk]);
             if($surveyData['type']==1)
             {
-                $Questions->correct = array_key_first($request->correct[$qk]);
+                $Questions->correct =$request->correct[$qk];
             }
             else
                 $Questions->correct = -1;
@@ -371,6 +371,97 @@ class UsersController extends Controller
         return view('survey/survey-detail', [
             'surveyData' => $surveyData,
             'qCount' => $qCount
+        ]);
+    }
+
+    /**
+     * Show specified view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Interger $id
+     * @return \Illuminate\Http\Response
+     */
+    public function answerSurveyForm(Request $request, $id=null)
+    {
+        if($id == null)
+            return redirect('/');
+
+        $surveyData = Survey::where('url', $id)->first();
+        if($surveyData == null)
+            return redirect('/');
+        if($surveyData['active'] != 1)
+            return redirect('/');
+        if($surveyData['registered_only'] == 1 AND Auth::user()== null)
+            return redirect('/');
+
+        $qCount = Questions::where("sid", $surveyData['id'])->count();
+        $questions = Questions::where("sid", $surveyData['id'])->get();
+        return view('survey/survey', [
+            'layout' => 'login',
+            'surveyData' => $surveyData,
+            'questions' => $questions,
+            'qCount' => $qCount
+        ]);
+    }
+
+    /**
+     * Show specified view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Interger $id
+     * @return \Illuminate\Http\Response
+     */
+    public function answerSurvey(Request $request, $id=null)
+    {
+        if($id == null)
+            return redirect('/');
+
+        $surveyData = Survey::where('url', $id)->first();
+        if($surveyData == null)
+            return redirect('/');
+        if($surveyData['active'] != 1)
+            return redirect('/');
+        if($surveyData['registered_only'] == 1 AND Auth::user()== null)
+            return redirect('/');
+
+
+        
+        $validated = $request->validate([
+            "answers"    => "required|array|min:1",
+            "answers.*"  => "required|integer|min:0",
+        ]);
+    
+    
+        foreach($request->answers as $qk=>$ans)
+        {
+            $answer = new Answers;
+            $answer->sid = $surveyData['id'];
+            $answer->qid = $qk;
+            $answer->answer = $ans;
+            
+            if(Auth::user()== null)
+            {
+                $answer->uid =0;
+            }
+            else
+                $answer->uid = Auth::user()->id;
+            $answer->save();
+        }
+    
+        return redirect('thank-you');
+    }
+
+    /**
+     * Show specified view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Interger $id
+     * @return \Illuminate\Http\Response
+     */
+    public function thankYou()
+    {
+        return view('survey/thank-you', [
+            'layout' => 'login',
         ]);
     }
 

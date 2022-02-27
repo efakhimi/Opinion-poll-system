@@ -41,13 +41,13 @@
                     </div>
                     <div class="mb-5">
                         @if($surveyData['type']==1)
-                            <input id="correct-a0-0" class="form-check-input" type="radio" name="correct[0][0]"><label class="form-check-label" for="correct-a0-0">این پاسخ صحیح است</label>
+                            <input id="correct-a0-0" class="form-check-input" type="radio" name="correct[0]" value="0"><label class="form-check-label" for="correct-a0-0">این پاسخ صحیح است</label>
                         @endif
                         <input type="text" class="form-control mt-5" placeholder="پاسخ اول" name="answer[0][]">
                     </div>
                     <div class="mb-5">
                         @if($surveyData['type']==1)
-                            <input id="correct-a0-1" class="form-check-input" type="radio" name="correct[0][1]"><label class="form-check-label" for="correct-a0-1">این پاسخ صحیح است</label>
+                            <input id="correct-a0-1" class="form-check-input" type="radio" name="correct[0]" value="1"><label class="form-check-label" for="correct-a0-1">این پاسخ صحیح است</label>
                         @endif
                         <input type="text" class="form-control mt-5" placeholder="پاسخ دوم" name="answer[0][]">
                     </div>
@@ -91,7 +91,8 @@
 
                 const radioCheckNode = document.createElement("INPUT");
                 radioCheckNode.setAttribute("type", "radio");
-                radioCheckNode.setAttribute("name", "correct["+qIndex+"]["+answers[qIndex]+"]");
+                radioCheckNode.setAttribute("name", "correct["+qIndex+"]");
+                radioCheckNode.setAttribute("value", answers[qIndex]);
                 radioCheckNode.setAttribute("id", "correct-a"+qIndex+"-"+answers[qIndex]);
                 radioCheckNode.className ="form-check-input";
                 newNode.appendChild(radioCheckNode);
@@ -134,14 +135,14 @@
             '</div>'+
             '<div class="mb-5">';
             if(type == 1)
-                html += '<input id="correct-a'+index+'-0" class="form-check-input" type="radio" name="correct['+index+'][0]">'+
+                html += '<input id="correct-a'+index+'-0" class="form-check-input" type="radio" name="correct['+index+']" value="0">'+
                 '    <label class="form-check-label" for="correct-a'+index+'-0">این پاسخ صحیح است</label>';
             html += '<input type="text" class="form-control mt-5" placeholder="پاسخ اول" name="answer['+index+'][]">'+
             '</div>'+
             '<div class="mb-5">';
 
             if(type == 1)
-                html += '<input id="correct-a'+index+'-1" class="form-check-input" type="radio" name="correct['+index+'][1]">'+
+                html += '<input id="correct-a'+index+'-1" class="form-check-input" type="radio" name="correct['+index+']" value="1">'+
             '    <label class="form-check-label" for="correct-a'+index+'-1">این پاسخ صحیح است</label>';
             html += ''+
             '    <input type="text" class="form-control mt-5" placeholder="پاسخ دوم" name="answer['+index+'][]">'+

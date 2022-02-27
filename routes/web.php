@@ -21,6 +21,10 @@ use App\Http\Controllers\ColorSchemeController;
 Route::get('dark-mode-switcher', [DarkModeController::class, 'switch'])->name('dark-mode-switcher');
 Route::get('color-scheme-switcher/{color_scheme}', [ColorSchemeController::class, 'switch'])->name('color-scheme-switcher');
 
+Route::get('/survey/{id?}', [UsersController::class, 'answerSurveyForm'])->where('id', '[a-zA-z0-9]+')->name('survey.index');
+Route::post('/survey/{id?}', [UsersController::class, 'answerSurvey'])->where('id', '[a-zA-z0-9]+')->name('survey.answer');
+Route::get('/thank-you', [UsersController::class, 'thankYou'])->name('thank-you');
+
 Route::controller(AuthController::class)->middleware('loggedin')->group(function() {
     Route::get('login', 'loginView')->name('login.index');
     Route::post('login', 'login')->name('login.check');
@@ -44,6 +48,7 @@ Route::middleware('auth')->group(function() {
         Route::get('/finilize-survey/{id?}', 'finilizeSurveyForm')->where('id', '[0-9]+')->name('finilize-survey.index');
         Route::post('/finilize-survey/{id?}', 'finilizeSurvey')->where('id', '[0-9]+')->name('finilize-survey.create');
         Route::get('/survey-detail/{id?}', 'surveyDetail')->where('id', '[0-9]+')->name('surveyDetail');
+
     });
     Route::controller(PageController::class)->group(function() {
 
