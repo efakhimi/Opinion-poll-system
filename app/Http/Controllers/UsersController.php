@@ -368,9 +368,48 @@ class UsersController extends Controller
             return redirect('surveys-list')->with('statusErr', 'پرسشنامه مورد نظر متعلق به شما نیست.');
 
         $qCount = Questions::where("sid", $surveyData['id'])->count();
+        $questions = Questions::where("sid", $surveyData['id'])->get();
+        $answers = array();
+        /**
+         * for question 1 we will have:
+         * $answers[1][0]['count'] = 5 => for answer 0 of q1 we have 5 votes
+         * $answers[1][0]['title'] = 'Answer 1'
+         * $answers[1][1]['count'] = 9 => for answer 1 of q1 we have 9 votes
+         * $answers[1][1]['title'] = 'Answer 2'
+         */
+        foreach($questions as $q){
+            $ans = json_decode($q['answers']);
+            foreach($ans as $ak=>$an)
+            {
+                $whereClause = [
+                    'sid'=>$surveyData['id'],
+                    'qid'=>$q['id'],
+                    'answer'=>$ak
+                ];
+                $answers[$q['id']][$ak]['count'] = Answers::where($whereClause)->count();
+                $answers[$q['id']][$ak]['title'] = $an;
+            }
+        }
+
+        $answerLabels = [];
+        $answerData = [];
+        foreach($answers as $ak=>$ans)
+        {
+            $answerLabels[$ak] = [];
+            $answerData[$ak] = [];
+            foreach($ans as $k=>$a){
+                $answerLabels[$ak][$k] = $a['title'];
+                $answerData[$ak][$k] = $a['count'];
+            }
+        }   
+        
         return view('survey/survey-detail', [
             'surveyData' => $surveyData,
-            'qCount' => $qCount
+            'qCount' => $qCount,
+            'answerLabels' => $answerLabels,
+            'answerData' => $answerData,
+            'answers' => $answers,
+            'questions' => $questions
         ]);
     }
 

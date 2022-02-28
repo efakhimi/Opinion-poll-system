@@ -109,12 +109,10 @@
         <div class="col-span-6 sm:col-span-12 xl:col-span-6 intro-y mb-2">
             <div class="intro-y box">
                 <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
-                    <h2 class="font-medium text-base ml-auto">گزارش شرکت کنندگان</h2>
+                    <h2 class="font-medium text-base ml-auto">گزارش شرکت کنندگان ( 7 روز گذشته )</h2>
                 </div>
                 <div class="font-medium p-5">
-
                     <canvas id="vertical-bar-chart-widget" height="200"></canvas>
-
                 </div>
             </div>
         </div>
@@ -122,13 +120,18 @@
         <div class="col-span-6 sm:col-span-12 xl:col-span-6 intro-y mb-2">
             <div class="intro-y box">
                 <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
-                    <h2 class="font-medium text-base ml-auto">آمار پاسخ ها</h2>
+                    <h2 class="font-medium text-base ml-auto">آمار پاسخ ها
+                        @if($qCount>2)
+                        <select class="tom-select " id="qPicker" onChange="updateChart();">
+                            @foreach($questions as $q)
+                            <option value="{{$q['id']}}">{{$q['question']}}</option>
+                            @endforeach
+                        </select>
+                        @endif
+                    </h2>
                 </div>
                 <div class="font-medium p-5">
                     <canvas id="chart1" height="200"></canvas>
-                </div>
-                <div class="font-medium p-5">
-                    <canvas id="chart2" height="200"></canvas>
                 </div>
             </div>
         </div>
@@ -141,14 +144,17 @@
 
 @section('script')
     <script >
+    var answerLabels = {!!json_encode($answerLabels)!!};
+    var answerData = {!!json_encode($answerData)!!};
+    
 const ctx = document.getElementById('chart1').getContext('2d');
 const myChart = new Chart(ctx, {
-    type: 'bar',
+    type: 'pie',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: answerLabels[Object.keys(answerLabels)[0]],
         datasets: [{
             label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
+            data: answerData[Object.keys(answerData)[0]],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -176,5 +182,14 @@ const myChart = new Chart(ctx, {
         }
     }
 });
+function updateChart()
+{
+    var newQuestionID = document.getElementById("qPicker").value;
+    myChart.data.labels = answerLabels[newQuestionID];
+    myChart.data.datasets.forEach((dataset) => {
+        dataset.data = answerData[newQuestionID];
+    });
+    myChart.update();
+}
     </script>
 @endsection
