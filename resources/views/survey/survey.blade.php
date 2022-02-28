@@ -46,7 +46,7 @@
                                 <div class="accordion-body text-slate-600 dark:text-slate-500 leading-relaxed">
                                     @foreach(json_decode($question['answers']) as $ak=>$answer)
                                     <div class="form-check mt-2">
-                                        <input id="answer-{{($ak)}}" class="form-check-input" type="radio" name="answers[{{$qk}}]" value="{{$ak}}">
+                                        <input id="answer-{{($ak)}}" class="form-check-input" type="radio" name="answers[{{$question['id']}}]" value="{{$ak}}">
                                         <label class="form-check-label" for="answer-{{($ak)}}">{{$answer}}</label>
                                     </div>
                                     @endforeach
