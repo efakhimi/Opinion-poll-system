@@ -504,4 +504,60 @@ class UsersController extends Controller
         ]);
     }
 
+    /**
+     * Show specified view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Interger $id
+     * @return \Illuminate\Http\Response
+     */
+    public function profileForm()
+    {
+        
+        return view('survey/profile', [
+        ]);
+    }
+
+
+    /**
+     * Show specified view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function profileUpdate(Request $request)
+    {
+        $id = Auth::user()->id;
+        $validated = $request->validate([
+            'name' => 'sometimes|nullable|string|unique:users,name,'.$id.'|max:70|min:3',
+            'email' => 'sometimes|nullable|email:rfc,dns|unique:users,email,'.$id.'|max:70|min:10',
+            'password' => 'sometimes|nullable|string|min:8',
+            'gender' => 'sometimes|nullable|string|in:male,female',
+            'pic' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+        if($request->name != null && trim($request->name)!="")
+            Users::where('id',$id)->update(['name'=>$request->name]);
+
+        if($request->email != null && trim($request->email)!="")
+            Users::where('id',$id)->update(['email'=>$request->email]);
+
+        if($request->password != null && trim($request->password)!="")
+            Users::where('id',$id)->update(['password'=>Hash::make($request->password)]);
+
+        if($request->gender != null && trim($request->gender)!="")
+            Users::where('id',$id)->update(['gender'=>$request->gender]);
+ 
+        if(isset($request->pic) AND $request->pic!=null)
+        {
+            $imageName = $id ."_". time().'.'.$request->pic->extension();  
+            
+            $request->pic->move(public_path('media/user/'), $imageName);
+
+            Users::where('id',$id)->update(['photo'=>$imageName]);
+        }
+
+
+        return redirect('profile')->with('status', 'ویرایش با موفقیت انجام شد.');
+    
+    }
 }

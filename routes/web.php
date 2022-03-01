@@ -49,10 +49,12 @@ Route::middleware('auth')->group(function() {
         Route::post('/finilize-survey/{id?}', 'finilizeSurvey')->where('id', '[0-9]+')->name('finilize-survey.create');
         Route::get('/survey-detail/{id?}', 'surveyDetail')->where('id', '[0-9]+')->name('surveyDetail');
 
+        Route::get('/profile', 'profileForm')->name('profile.index');
+        Route::post('/profile', 'profileUpdate')->name('profile.update');
     });
     Route::controller(PageController::class)->group(function() {
 
-        Route::get('/', 'dashboardOverview1')->name('dashboard-overview-1');
+        Route::get('/', 'dashboardOverview1')->name('dashboard');
         Route::get('dashboard-overview-2-page', 'dashboardOverview2')->name('dashboard-overview-2');
         Route::get('dashboard-overview-3-page', 'dashboardOverview3')->name('dashboard-overview-3');
         Route::get('inbox-page', 'inbox')->name('inbox');

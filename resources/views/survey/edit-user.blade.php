@@ -43,7 +43,7 @@
                     <input id="crud-form-1" type="password" class="form-control w-full"  name="password">
                 </div>
                 <div>
-                    <select class="form-select mt-2 sm:mr-2" aria-label="Default select example" name="gender">
+                    <select class="form-select mt-2 sm:ml-2" aria-label="Default select example" name="gender">
                         <option value="male" {{ ( $userData['gender']=="male" ? "selected" : "" )}}>مرد</option>
                         <option value="female" {{ ( $userData['gender']=="female" ? "selected" : "" )}}>زن</option>
                     </select>
