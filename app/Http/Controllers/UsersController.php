@@ -420,6 +420,29 @@ class UsersController extends Controller
      * @param  Interger $id
      * @return \Illuminate\Http\Response
      */
+    public function delSurvey(Request $request, $id=null)
+    {
+        if($id == null)
+            return redirect('surveys-list')->with('statusErr', 'برای ویرایش باید یک پرسشنامه انتخاب کرده باشید.');
+
+        $surveyData = Survey::where('id', $id)->first();
+        if($surveyData == null)
+            return redirect('surveys-list')->with('statusErr', 'پرسشنامه مورد نظر یافت نشد.');
+        if(Auth::user()->id != $surveyData['uid'])
+            return redirect('surveys-list')->with('statusErr', 'پرسشنامه مورد نظر متعلق به شما نیست.');
+        if(Auth::user()->is_admin!=1)
+            return redirect('/');
+        Survey::where('id', $id)->delete();
+        return redirect('surveys-list')->with('status', 'پرسشنامه مورد نظر با موفقیت حذف شد.');
+    }
+
+    /**
+     * Show specified view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Interger $id
+     * @return \Illuminate\Http\Response
+     */
     public function answerSurveyForm(Request $request, $id=null)
     {
         if($id == null)
