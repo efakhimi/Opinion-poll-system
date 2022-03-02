@@ -362,7 +362,7 @@ class UsersController extends Controller
         $surveyData = Survey::where('id', $id)->first();
         //dd($userData);
         if($surveyData == null)
-            return redirect('users-list')->with('statusErr', 'پرسشنامه مورد نظر یافت نشد.');
+            return redirect('surveys-list')->with('statusErr', 'پرسشنامه مورد نظر یافت نشد.');
         
         if($surveyData['uid'] != Auth::user()->id)
             return redirect('surveys-list')->with('statusErr', 'پرسشنامه مورد نظر متعلق به شما نیست.');
@@ -435,6 +435,89 @@ class UsersController extends Controller
         Survey::where('id', $id)->delete();
         return redirect('surveys-list')->with('status', 'پرسشنامه مورد نظر با موفقیت حذف شد.');
     }
+
+    /**
+     * Show specified view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Interger $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editSurveyForm(Request $request, $id=null)
+    {
+        if(Auth::user()->access_level>=2)
+            return redirect('/user-plans');
+            
+        if($id == null)
+            return redirect('surveys-list')->with('statusErr', 'برای افزودن سوال باید یک پرسشنامه انتخاب کرده باشید.');
+
+        $surveyData = Survey::where('id', $id)->first();
+        if($surveyData == null)
+            return redirect('surveys-list')->with('statusErr', 'پرسشنامه مورد نظر یافت نشد.');
+        
+        if($surveyData['uid'] != Auth::user()->id)
+            return redirect('surveys-list')->with('statusErr', 'پرسشنامه مورد نظر متعلق به شما نیست.');
+
+        return view('survey/edit-survey', [
+            'surveyData' => $surveyData
+        ]);
+    }
+
+    /**
+     * Show specified view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function editSurvey(Request $request, $id=null)
+    {
+        if(Auth::user()->access_level>=2)
+            return redirect('/user-plans');
+            
+        if($id == null)
+            return redirect('surveys-list')->with('statusErr', 'برای ویرایش باید یک پرسشنامه انتخاب کرده باشید.');
+
+        $surveyData = Survey::where('id', $id)->first();
+        if($surveyData == null)
+            return redirect('surveys-list')->with('statusErr', 'پرسشنامه مورد نظر یافت نشد.');
+
+        if($surveyData['uid'] != Auth::user()->id)
+            return redirect('surveys-list')->with('statusErr', 'پرسشنامه مورد نظر متعلق به شما نیست.');
+
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:70|min:3',
+            'desc' => 'required|string|min:10',
+            'type' => 'required|string|in:0,1,2',
+            'pic' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        
+        $active = $request->active=="on" ? 1:0;
+        $public = $request->public=="on" ? 1:0;
+        $registered_only = $request->registered=="on" ? 1:0;
+        $password = "";
+        if(!isset($request->public) || $request->public!="on")
+            $password = rand(11,99)."".rand(33,88)."".rand(11,99);
+        
+        if(isset($request->pic) AND $request->pic!=null)
+        {
+            $imageName = time()."_".$surveyData['url'].'.'.$request->pic->extension();  
+         
+            $request->pic->move(public_path('images/survey/'), $imageName);
+
+            $photo = $imageName;
+            Survey::where('id',$id)->update(['photo'=>$photo]);
+        }
+ 
+        Survey::where('id',$id)->update(['title'=>$request->title, 'description'=>$request->desc, 'type'=>$request->type, 'public'=>$public, 'registered_only'=>$registered_only, 'active'=>$active]);
+        if($password != '')
+            Survey::where('id',$id)->update(['password'=>$password]);
+
+
+        return redirect('surveys-list')->with('status', 'ویرایش با موفقیت انجام شد.');
+    
+    }
+
 
     /**
      * Show specified view.
