@@ -127,12 +127,12 @@
                     @if (!$surveys->onFirstPage())
                     <li class="page-item">
                         <a class="page-link" href="{{ ($surveys->url(1)) }}">
-                            <i class="w-4 h-4" data-feather="chevrons-left"></i>
+                            <i class="w-4 h-4" data-feather="chevrons-right"></i>
                         </a>
                     </li>
                     <li class="page-item">
                         <a class="page-link" href="{{ ($surveys->previousPageUrl()) }}">
-                            <i class="w-4 h-4" data-feather="chevron-left"></i>
+                            <i class="w-4 h-4" data-feather="chevron-right"></i>
                         </a>
                     </li>
 
@@ -150,12 +150,12 @@
                     
                     <li class="page-item">
                         <a class="page-link" href="{{ ($surveys->nextPageUrl()) }}">
-                            <i class="w-4 h-4" data-feather="chevron-right"></i>
+                            <i class="w-4 h-4" data-feather="chevron-left"></i>
                         </a>
                     </li>
                     <li class="page-item">
                         <a class="page-link" href="{{ ($surveys->url($surveys->lastPage())) }}">
-                            <i class="w-4 h-4" data-feather="chevrons-right"></i>
+                            <i class="w-4 h-4" data-feather="chevrons-left"></i>
                         </a>
                     </li>
                     @endif

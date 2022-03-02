@@ -76,7 +76,7 @@
                             <td class="w-40">
                                 <div class="flex">
                                     <div class="w-10 h-10 image-fit zoom-in">
-                                        <img alt="Rubick Tailwind HTML Admin Template" class="tooltip rounded-full" src="{{ ($user['photo'] == null ? url('media/no-image.png') : url('media/user/' . $user['id'] . '/' . $user['photo'])) }}" title="Uploaded at ">
+                                        <img alt="Rubick Tailwind HTML Admin Template" class="tooltip rounded-full" src="{{ ($user['photo'] == null ? url('media/no-image.png') : url('media/user/' . $user['photo'])) }}" title="Uploaded at ">
                                     </div>
                                 </div>
                             </td>
@@ -115,12 +115,12 @@
                     @if (!$users->onFirstPage())
                     <li class="page-item">
                         <a class="page-link" href="{{ ($users->url(1)) }}">
-                            <i class="w-4 h-4" data-feather="chevrons-left"></i>
+                            <i class="w-4 h-4" data-feather="chevrons-right"></i>
                         </a>
                     </li>
                     <li class="page-item">
                         <a class="page-link" href="{{ ($users->previousPageUrl()) }}">
-                            <i class="w-4 h-4" data-feather="chevron-left"></i>
+                            <i class="w-4 h-4" data-feather="chevron-right"></i>
                         </a>
                     </li>
 
@@ -138,12 +138,12 @@
                     
                     <li class="page-item">
                         <a class="page-link" href="{{ ($users->nextPageUrl()) }}">
-                            <i class="w-4 h-4" data-feather="chevron-right"></i>
+                            <i class="w-4 h-4" data-feather="chevron-left"></i>
                         </a>
                     </li>
                     <li class="page-item">
                         <a class="page-link" href="{{ ($users->url($users->lastPage())) }}">
-                            <i class="w-4 h-4" data-feather="chevrons-right"></i>
+                            <i class="w-4 h-4" data-feather="chevrons-left"></i>
                         </a>
                     </li>
                     @endif
