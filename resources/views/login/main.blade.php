@@ -44,7 +44,7 @@
                     </div>
                     <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left">
                         <button id="btn-login" class="btn btn-primary py-3 px-4 w-full xl:w-32 xl:mr-3 align-top">ورود</button>
-                        <button class="btn btn-outline-secondary py-3 px-4 w-full xl:w-32 mt-3 xl:mt-0 align-top">ثبت نام</button>
+                        <button class="btn btn-outline-secondary py-3 px-4 w-full xl:w-32 mt-3 xl:mt-0 align-top" onClick="window.location.href='{{url("register")}}'">ثبت نام</button>
                     </div>
                     <div class="intro-x mt-10 xl:mt-24 text-slate-600 dark:text-slate-500 text-center xl:text-left">
                         با ثبت نام و ورود، شما موافق خود را با <a class="text-primary dark:text-slate-200" href="">قوانین و شرایط استفاده</a> و <a class="text-primary dark:text-slate-200" href="">سیاست حریم شخصی</a> را اعلام میکنید.
