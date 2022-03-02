@@ -49,6 +49,8 @@ Route::middleware('auth')->group(function() {
         Route::post('/finilize-survey/{id?}', 'finilizeSurvey')->where('id', '[0-9]+')->name('finilize-survey.create');
         Route::get('/survey-detail/{id?}', 'surveyDetail')->where('id', '[0-9]+')->name('surveyDetail');
         Route::get('/del-survey/{id?}', 'delSurvey')->where('id', '[0-9]+')->name('del-survey');
+        Route::get('/edit-survey/{id?}', 'editSurveyForm')->where('id', '[0-9]+')->name('edit-survey.index');
+        Route::post('/edit-survey/{id?}', 'editSurvey')->where('id', '[0-9]+')->name('edit-survey.update');
 
         Route::get('/profile', 'profileForm')->name('profile.index');
         Route::post('/profile', 'profileUpdate')->name('profile.update');
