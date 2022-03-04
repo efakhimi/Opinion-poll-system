@@ -24,6 +24,9 @@ class UserFactory extends Factory
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'gender' => ['male', 'female'][rand(0, 1)],
             'active' => 1,
+            'is_admin' => 0,
+            'access_level' => rand(0, 3),
+            'photo' => '',
             'remember_token' => Str::random(10),
         ];
     }

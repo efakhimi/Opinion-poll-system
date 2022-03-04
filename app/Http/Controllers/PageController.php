@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Users;
+use App\Models\Survey;
 
 class PageController extends Controller
 {
@@ -15,12 +17,25 @@ class PageController extends Controller
      */
     public function dashboard()
     {
-        return view('survey/dashboard', [
-            // Specify the base layout.
-            // Eg: 'side-menu', 'simple-menu', 'top-menu', 'login'
-            // The default value is 'side-menu'
+        if(Auth::user()->is_admin!=1)
+            redirect('/surveys-list');   
+        $surveysCount = Survey::all()->count();
+        $activeSurveysCount = Survey::where('active', 1)->count();
+        $activeSurveysPercent = round($activeSurveysCount*100/$surveysCount , 2);
+        
+        $usersCount = Users::all()->count();
+        $activeUsersCount = Users::where('active', 1)->count();
+        $activeUsersPercent = round($activeUsersCount*100/$usersCount , 2);
 
-            // 'layout' => 'side-menu'
+        $latestSurveys = Survey::orderBy('id', 'desc')->get()->take(5);
+        return view('survey/dashboard', [
+            'surveysCount' => $surveysCount,
+            'activeSurveysCount' => $activeSurveysCount,
+            'activeSurveysPercent' => $activeSurveysPercent,
+            'usersCount' => $usersCount,
+            'activeUsersCount' => $activeUsersCount,
+            'activeUsersPercent' => $activeUsersPercent,
+            'latestSurveys' => $latestSurveys,
         ]);
     }
 }
