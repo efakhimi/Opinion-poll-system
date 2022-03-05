@@ -181,7 +181,7 @@ class UsersController extends Controller
      */
     public function newSurveyForm()
     {
-        if(Auth::user()->access_level>=2)
+        if(Auth::user()->access_level<2)
             return redirect('/user-plans');
             
             
@@ -197,7 +197,7 @@ class UsersController extends Controller
      */
     public function newSurvey(Request $request)
     { 
-        if(Auth::user()->access_level>=2)
+        if(Auth::user()->access_level<2)
             return redirect('/user-plans');
 
         $validated = $request->validate([
@@ -248,7 +248,7 @@ class UsersController extends Controller
      */
     public function surveysList ()
     {
-        if(Auth::user()->access_level>=2)
+        if(Auth::user()->access_level<2)
             return redirect('/user-plans');
             
         $surveys = Survey::where("uid", Auth::user()->id)->paginate(10);
@@ -273,7 +273,7 @@ class UsersController extends Controller
      */
     public function finilizeSurveyForm(Request $request, $id=null)
     {
-        if(Auth::user()->access_level>=2)
+        if(Auth::user()->access_level<2)
             return redirect('/user-plans');
             
         if($id == null)
@@ -298,7 +298,7 @@ class UsersController extends Controller
      */
     public function finilizeSurvey(Request $request, $id=null)
     {
-        if(Auth::user()->access_level>=2)
+        if(Auth::user()->access_level<2)
             return redirect('/user-plans');
             
         if($id == null)
@@ -353,7 +353,7 @@ class UsersController extends Controller
      */
     public function surveyDetail(Request $request, $id=null)
     {
-        if(Auth::user()->access_level>=2)
+        if(Auth::user()->access_level<2)
             return redirect('/user-plans');
             
         if($id == null)
@@ -445,7 +445,7 @@ class UsersController extends Controller
      */
     public function editSurveyForm(Request $request, $id=null)
     {
-        if(Auth::user()->access_level>=2)
+        if(Auth::user()->access_level<2)
             return redirect('/user-plans');
             
         if($id == null)
@@ -471,7 +471,7 @@ class UsersController extends Controller
      */
     public function editSurvey(Request $request, $id=null)
     {
-        if(Auth::user()->access_level>=2)
+        if(Auth::user()->access_level<2)
             return redirect('/user-plans');
             
         if($id == null)
