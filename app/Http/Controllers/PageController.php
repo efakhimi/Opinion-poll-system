@@ -21,11 +21,11 @@ class PageController extends Controller
             redirect('/surveys-list');   
         $surveysCount = Survey::all()->count();
         $activeSurveysCount = Survey::where('active', 1)->count();
-        $activeSurveysPercent = round($activeSurveysCount*100/$surveysCount , 2);
+        $activeSurveysPercent = $activeSurveysCount== 0 ? 0 : round($activeSurveysCount*100/$surveysCount , 2);
         
         $usersCount = Users::all()->count();
         $activeUsersCount = Users::where('active', 1)->count();
-        $activeUsersPercent = round($activeUsersCount*100/$usersCount , 2);
+        $activeUsersPercent = $activeUsersCount== 0 ? 0 : round($activeUsersCount*100/$usersCount , 2);
 
         $latestSurveys = Survey::orderBy('id', 'desc')->get()->take(5);
         return view('survey/dashboard', [
